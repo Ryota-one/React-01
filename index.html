@@ -16,27 +16,60 @@
     'use strict';
     {
       const Menu = (props)=>{
-        console.log(props);
+        const decrement = () => {
+          // App conponentのcountsを更新する処理をここに追加
+        };
+          const increment = () => {
+        };
+
         return(
-          <li className="py-2 border m-2 p-2 rounded hover:bg-gray-50 cursor-pointer">{props.name}</li>
+          <li className="py-2 border m-2 p-2 rounded hover:bg-gray-50 cursor-pointer">
+           <button onClick={decrement} className="border border-black m-1 rounded w-6 bg-gray-200 hover:bg-gray-300">-</button>
+            <button onClick={increment} className="border border-black m-1 rounded w-6 bg-gray-200 hover:bg-gray-300">+</button>
+            {props.name}({props.price}円 × {props.count}個)
+            </li>
         )
       }
+
       const App = () =>{
+        const [counts, setCounts] = React.useState([0,0,0]);
+        const menus = [
+          {id: 0,name:'牛丼', price:400},
+          {id: 1,name:'カレー', price:500},
+          {id: 2,name:'サラダ', price:300},
+        ];
+        const total = (menus[0].price * counts[0]) +
+                      (menus[1].price * counts[1]) +
+                      (menus[2].price * counts[2]);
+        const decrementMenu = () => {
+          console.log('minus button clicked!');
+        }
+
+        const menuItems = menus.map((menu) => {
+          return (
+            <Menu
+              key={menu.id}
+              count={counts[menu.id]}
+              name={menu.name}
+              price={menu.price}
+              onDecrement={decrementMenu}
+            /> 
+          );
+        });
+
       return(
         <>
       <div className="flex justify-center items-center mt-5">
-        <h1 className="bg-blue-100 w-1/4 p-6 h-20 text-center text-ml font-bold rounded-xl">Menu</h1>
+        <h1 className="bg-blue-100 w-1/2 max-w-md p-6 h-20 text-center text-ml font-bold rounded-xl">Menu</h1>
         </div>
           <div className="flex justify-center items-center mt-5 ">
-            <ul className="bg-white p-4 rounded-lg shadow-md w-1/3 mt-4 border border-gray-300">
-              <Menu name='牛丼'/>
-              <Menu name='カレー'/>
-              <Menu name='サラダ'/>
+            <ul className="bg-white p-4 rounded-lg shadow-md w-1/2 max-w-md mt-4 border border-gray-300">
+              {menuItems}
             </ul>
       </div>
 
       <div className="flex justify-center items-center mt-5">
-        <p>合計:0円</p>
+        <p>合計:{total}円</p>
       </div>
 </>
       );
